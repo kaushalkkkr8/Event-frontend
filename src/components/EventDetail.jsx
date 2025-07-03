@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/context/AuthContext";
 
-export default function EventDetail({ id }) {
+export default function EventDetail({ id, onBack }) {
   const { getEventById, register } = useEvent();
   const { user } = useAuth();
   const [event, setEvent] = useState(null);
@@ -32,7 +32,7 @@ export default function EventDetail({ id }) {
   const handleRegister = async () => {
     try {
       await register(event._id);
-      setIsRegistered(true); 
+      setIsRegistered(true);
       const updatedEvent = await getEventById(id);
       setEvent(updatedEvent);
     } catch (err) {
@@ -46,14 +46,12 @@ export default function EventDetail({ id }) {
 
   return (
     <div className="w-full h-full">
+      <Button variant="ghost" className="mb-4 flex items-center space-x-2" onClick={onBack}>
+        <span className="text-xl">←</span>
+        <span>Back to Events</span>
+      </Button>
       <Card className="w-full max-w-4xl mx-auto shadow-lg rounded-xl overflow-hidden">
-        {event?.image?.imageURL && (
-          <img
-            src={event.image.imageURL}
-            alt={event.image.originalName || "Event Image"}
-            className="w-full h-64 object-cover"
-          />
-        )}
+        {event?.image?.imageURL && <img src={event.image.imageURL} alt={event.image.originalName || "Event Image"} className="w-full h-64 object-cover" />}
 
         <CardHeader>
           <CardTitle className="text-2xl">{event.title}</CardTitle>
@@ -87,15 +85,7 @@ export default function EventDetail({ id }) {
             )}
           </div>
 
-          <Button
-            className={`mt-4 text-white ${
-              isRegistered
-                ? "bg-gray-400 cursor-not-allowed"
-                : "cursor-pointer bg-green-600 hover:bg-green-700"
-            }`}
-            disabled={isRegistered}
-            onClick={handleRegister}
-          >
+          <Button className={`mt-4 text-white ${isRegistered ? "bg-gray-400 cursor-not-allowed" : "cursor-pointer bg-green-600 hover:bg-green-700"}`} disabled={isRegistered} onClick={handleRegister}>
             {isRegistered ? "Already Registered" : "Register"}
           </Button>
         </CardContent>

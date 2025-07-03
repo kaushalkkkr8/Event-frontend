@@ -5,30 +5,33 @@ import { useAuth } from "@/context/AuthContext";
 import { useEvent } from "@/context/EventContext";
 import EventList from "@/components/EventList";
 import EventForm from "@/components/EventCard";
-import EventDetail from "@/components/EventDetail"; 
+import EventDetail from "@/components/EventDetail";
 import { Navigate } from "react-router-dom";
 
-import bg2 from "@/assets/bg2.jpg"
+import bg2 from "@/assets/bg2.jpg";
 
 export default function DashboardLayout() {
   const { user, logout } = useAuth();
   const { events, allEvents } = useEvent();
   const [view, setView] = useState("events");
-  const [selectedEventId, setSelectedEventId] = useState(null); 
+  const [selectedEventId, setSelectedEventId] = useState(null);
 
   useEffect(() => {
     allEvents();
   }, []);
-  
-    const token = localStorage.getItem("token");
+
+  const token = localStorage.getItem("token");
   if (!token) {
     return <Navigate to="/" replace />;
   }
 
-
   return (
-    <div className="flex min-h-screen" style={{
-        backgroundImage: `url(${bg2})`}} >
+    <div
+      className="flex min-h-screen"
+      style={{
+        backgroundImage: `url(${bg2})`,
+      }}
+    >
       <div className="w-64  backdrop-blur-sm border-r px-4 py-6 space-y-8 shadow-sm">
         <div className="flex items-center gap-3">
           <Avatar>
@@ -75,7 +78,7 @@ export default function DashboardLayout() {
       </div>
 
       <div className="flex-1 p-6 overflow-y-auto">
-        {selectedEventId ? <EventDetail id={selectedEventId} /> : view === "events" ? <EventList  onSelect={(id) => setSelectedEventId(id)} /> : <EventForm />}
+        {selectedEventId ? <EventDetail id={selectedEventId} onBack={() => setSelectedEventId(null)} /> : view === "events" ? <EventList onSelect={(id) => setSelectedEventId(id)} /> : <EventForm />}
       </div>
     </div>
   );

@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { useEvent } from "@/context/EventContext";
+import { Loader2 } from "lucide-react"; // spinner icon
 
 export default function EventForm() {
   const {
@@ -22,10 +23,12 @@ export default function EventForm() {
   const { addEvent, allEvents } = useEvent();
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false); // loading state
 
   const onSubmit = async (data) => {
     setError("");
     setMessage("");
+    setIsSubmitting(true); // start spinner
 
     try {
       const formData = new FormData();
@@ -44,6 +47,8 @@ export default function EventForm() {
       allEvents();
     } catch (err) {
       setError(err);
+    } finally {
+      setIsSubmitting(false); // stop spinner
     }
   };
 
@@ -66,7 +71,6 @@ export default function EventForm() {
             )}
           </div>
 
-
           <div>
             <Label>About</Label>
             <Input {...register("about", { required: true })} />
@@ -87,7 +91,6 @@ export default function EventForm() {
             )}
           </div>
 
-
           <div>
             <Label>Date</Label>
             <Input type="date" {...register("date", { required: true })} />
@@ -104,18 +107,25 @@ export default function EventForm() {
             )}
           </div>
 
-    
           <div>
             <Label>Upload Image</Label>
             <Input type="file" accept="image/*" {...register("image")} />
           </div>
 
-
-          <Button type="submit" className=" cursor-pointer bg-green-600 hover:bg-green-700 w-full">
-            Create Event
+          <Button
+            type="submit"
+            className="w-full bg-green-600 hover:bg-green-700"
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? (
+              <span className="flex items-center justify-center gap-2">
+                <Loader2 className="animate-spin w-4 h-4" /> Creating...
+              </span>
+            ) : (
+              "Create Event"
+            )}
           </Button>
 
-      
           {message && <p className="text-green-600 text-sm">{message}</p>}
           {error && <p className="text-red-600 text-sm">{error}</p>}
         </form>

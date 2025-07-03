@@ -6,22 +6,27 @@ const EventContext = createContext();
 export const EventProvider = ({ children }) => {
   const [events, setEvents] = useState([]);
 
-  const allEvents = async () => {
-    try {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        navigate("/");
-        throw new Error("Authentication token missing");
-      }
-      const res = await api.get("/event", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
 
-      setEvents(res.data.events);
-    } catch (err) {
-      throw err?.response?.data?.message || "Failed to fetch events";
+  const allEvents = async ({ search = "", date = "", page = 1, limit = 5 } = {}) => {
+  try {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      navigate("/");
+      throw new Error("Authentication token missing");
     }
-  };
+
+    const res = await api.get("/event", {
+      params: { search, date, page, limit },
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    setEvents(res.data.events); 
+    return res.data;
+  } catch (err) {
+    throw err?.response?.data?.message || "Failed to fetch events";
+  }
+};
+
 
   const addEvent = async (data) => {
     try {

@@ -29,7 +29,6 @@ export default function DashboardLayout() {
   return (
     <div className="flex min-h-screen" style={{
         backgroundImage: `url(${bg2})`}} >
-      {/* Sidebar */}
       <div className="w-64  backdrop-blur-sm border-r px-4 py-6 space-y-8 shadow-sm">
         <div className="flex items-center gap-3">
           <Avatar>
@@ -75,7 +74,6 @@ export default function DashboardLayout() {
         </div>
       </div>
 
-      {/* Main Content */}
       <div className="flex-1 p-6 overflow-y-auto">
         {selectedEventId ? <EventDetail id={selectedEventId} /> : view === "events" ? <EventList  onSelect={(id) => setSelectedEventId(id)} /> : <EventForm />}
       </div>

@@ -18,7 +18,6 @@ export default function EventDetail({ id }) {
         const data = await getEventById(id);
         setEvent(data);
 
-        // Check if current user is already in attendees
         const registered = data.attendees?.some((att) => att._id === user?._id);
         setIsRegistered(registered);
       } catch (err) {
@@ -33,8 +32,8 @@ export default function EventDetail({ id }) {
   const handleRegister = async () => {
     try {
       await register(event._id);
-      setIsRegistered(true); // Immediately disable button after register
-      const updatedEvent = await getEventById(id); // Optional: fetch updated event
+      setIsRegistered(true); 
+      const updatedEvent = await getEventById(id);
       setEvent(updatedEvent);
     } catch (err) {
       console.error("Registration failed:", err);
@@ -92,7 +91,7 @@ export default function EventDetail({ id }) {
             className={`mt-4 text-white ${
               isRegistered
                 ? "bg-gray-400 cursor-not-allowed"
-                : "bg-green-600 hover:bg-green-700"
+                : "cursor-pointer bg-green-600 hover:bg-green-700"
             }`}
             disabled={isRegistered}
             onClick={handleRegister}

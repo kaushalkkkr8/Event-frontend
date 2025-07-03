@@ -1,7 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import api from "@/lib/axios";
 import { useNavigate } from "react-router-dom";
-import DashboardLayout from "@/pages/Dashboard";
 
 const AuthContext = createContext();
 
@@ -24,11 +23,11 @@ export const AuthProvider = ({ children }) => {
       }
     } catch (error) {
       console.error("Error fetching profile:", error);
-      logout(); // Clear invalid token
+      logout();
     }
   };
 
-  // 👇 Automatically load user if token exists
+  
   useEffect(() => {
     getProfile();
   }, []);
@@ -62,9 +61,9 @@ export const AuthProvider = ({ children }) => {
     }
   };
     const logout = () => {
-    localStorage.removeItem("token");   // Remove JWT
-    setUser(null);                      // Clear user state
-    navigate("/");                      // Redirect to login page
+    localStorage.removeItem("token");   
+    setUser(null);                      
+    navigate("/");                      
   };
 
   return <AuthContext.Provider value={{ user, signUp,logIn,logout }}>{children}</AuthContext.Provider>;

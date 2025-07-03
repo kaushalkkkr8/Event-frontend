@@ -5,7 +5,7 @@ import { useAuth } from "@/context/AuthContext";
 import { useEvent } from "@/context/EventContext";
 import EventList from "@/components/EventList";
 import EventForm from "@/components/EventCard";
-import EventDetail from "@/components/EventDetail"; // 👈 import this
+import EventDetail from "@/components/EventDetail"; 
 import { Navigate } from "react-router-dom";
 
 import bg2 from "@/assets/bg2.jpg"
@@ -14,7 +14,7 @@ export default function DashboardLayout() {
   const { user, logout } = useAuth();
   const { events, allEvents } = useEvent();
   const [view, setView] = useState("events");
-  const [selectedEventId, setSelectedEventId] = useState(null); // 👈 for detail view
+  const [selectedEventId, setSelectedEventId] = useState(null); 
 
   useEffect(() => {
     allEvents();

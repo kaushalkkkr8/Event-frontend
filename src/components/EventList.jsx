@@ -21,8 +21,9 @@ const EventList = ({ onSelect }) => {
 
   const fetchData = async () => {
     try {
-      setLoading(true); 
-      const queryDate = date ? new Date(date).toISOString() : "";
+      setLoading(true);
+      const queryDate = date ? `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}` : "";
+
       const res = await allEvents({
         search,
         date: queryDate,
@@ -75,7 +76,7 @@ const EventList = ({ onSelect }) => {
             setPage(1);
             setDate(d);
           }}
-          className="rounded-md border transform scale-[0.7] origin-top"
+          className="rounded-md border transform scale-[0.85] origin-top"
           modifiers={{ highlighted: eventDates }}
           modifiersClassNames={{
             highlighted: "bg-emerald-400 text-white font-bold rounded-full",
@@ -92,49 +93,29 @@ const EventList = ({ onSelect }) => {
           <p className="text-center text-gray-600 col-span-2">No events found.</p>
         ) : (
           events.map((event) => (
-            <div
-              key={event?._id}
-              className="border p-3 rounded-lg shadow-md bg-white/90 backdrop-blur-sm flex flex-col justify-between text-sm"
-            >
-              {event?.image?.imageURL && (
-                <img
-                  alt={event?.image?.originalName || "event-image"}
-                  src={event?.image?.imageURL}
-                  className="w-full h-40 object-cover rounded-md mb-3"
-                />
-              )}
+            <div key={event?._id} className="border p-3 rounded-lg shadow-md bg-white/90 backdrop-blur-sm flex flex-col justify-between text-sm">
+              {event?.image?.imageURL && <img alt={event?.image?.originalName || "event-image"} src={event?.image?.imageURL} className="w-full h-40 object-cover rounded-md mb-3" />}
 
               <div>
                 <h2 className="text-md font-semibold">{event?.title}</h2>
                 <p className="text-xs text-gray-600 mt-1">{event?.about}</p>
                 <div className="text-xs text-gray-500 mt-2">
-                  📍 {event?.location} | 📅{" "}
-                  {new Date(event?.date).toLocaleDateString("en-IN")}
+                  📍 {event?.location} | 📅 {new Date(event?.date).toLocaleDateString("en-IN")}
                 </div>
               </div>
 
               <div className="flex justify-between mt-3">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => onSelect(event?._id)}
-                >
+                <Button variant="outline" size="sm" onClick={() => onSelect(event?._id)}>
                   Details
                 </Button>
 
                 <Button
                   size="sm"
-                  className={
-                    event?.attendees[0]?._id === user?._id
-                      ? "cursor-not-allowed opacity-50"
-                      : "cursor-pointer bg-green-600 hover:bg-green-700 text-white"
-                  }
+                  className={event?.attendees[0]?._id === user?._id ? "cursor-not-allowed opacity-50" : "cursor-pointer bg-green-600 hover:bg-green-700 text-white"}
                   disabled={event?.attendees[0]?._id === user?._id}
                   onClick={() => handleRegister(event?._id)}
                 >
-                  {event?.attendees[0]?._id === user?._id
-                    ? "Already Registered"
-                    : "Register"}
+                  {event?.attendees[0]?._id === user?._id ? "Already Registered" : "Register"}
                 </Button>
               </div>
             </div>
@@ -143,19 +124,11 @@ const EventList = ({ onSelect }) => {
       </div>
 
       <div className="flex justify-center gap-4 mt-6">
-        <Button
-          variant="outline"
-          onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
-          disabled={page === 1}
-        >
+        <Button variant="outline" onClick={() => setPage((prev) => Math.max(prev - 1, 1))} disabled={page === 1}>
           Previous
         </Button>
         <span className="self-center text-gray-700">Page {page}</span>
-        <Button
-          variant="outline"
-          onClick={() => setPage((prev) => prev + 1)}
-          disabled={page >= totalPages}
-        >
+        <Button variant="outline" onClick={() => setPage((prev) => prev + 1)} disabled={page >= totalPages}>
           Next
         </Button>
       </div>

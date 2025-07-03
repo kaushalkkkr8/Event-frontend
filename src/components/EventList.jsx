@@ -5,9 +5,8 @@ import { useAuth } from "@/context/AuthContext";
 import { Input } from "@/components/ui/input";
 import { Calendar } from "@/components/ui/calendar";
 
-const EventList = ({ onSelect }) => {
+const EventList = ({ user, onSelect }) => {
   const { register, allEvents } = useEvent();
-  const { user } = useAuth();
 
   const [registeredIds, setRegisteredIds] = useState([]);
   const [search, setSearch] = useState("");
@@ -109,14 +108,20 @@ const EventList = ({ onSelect }) => {
                   Details
                 </Button>
 
-                <Button
-                  size="sm"
-                  className={event?.attendees[0]?._id === user?._id ? "cursor-not-allowed opacity-50" : "cursor-pointer bg-green-600 hover:bg-green-700 text-white"}
-                  disabled={event?.attendees[0]?._id === user?._id}
-                  onClick={() => handleRegister(event?._id)}
-                >
-                  {event?.attendees[0]?._id === user?._id ? "Already Registered" : "Register"}
-                </Button>
+                {(() => {
+                  const isRegistered = event?.attendees?.some((att) => att._id === user?._id);
+
+                  return (
+                    <Button
+                      size="sm"
+                      className={isRegistered ? "cursor-not-allowed opacity-50" : "cursor-pointer bg-green-600 hover:bg-green-700 text-white"}
+                      disabled={isRegistered}
+                      onClick={() => handleRegister(event?._id)}
+                    >
+                      {isRegistered ? "Already Registered" : "Register"}
+                    </Button>
+                  );
+                })()}
               </div>
             </div>
           ))

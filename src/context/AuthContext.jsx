@@ -27,7 +27,6 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  
   useEffect(() => {
     getProfile();
   }, []);
@@ -66,7 +65,7 @@ export const AuthProvider = ({ children }) => {
     navigate("/");                      
   };
 
-  return <AuthContext.Provider value={{ user, signUp,logIn,logout }}>{children}</AuthContext.Provider>;
+  return <AuthContext.Provider value={{ user, signUp,logIn,logout,getProfile }}>{children}</AuthContext.Provider>;
 };
 
 export const useAuth = () => {

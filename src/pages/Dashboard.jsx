@@ -11,16 +11,26 @@ import { Navigate } from "react-router-dom";
 import bg2 from "@/assets/bg2.jpg";
 
 export default function DashboardLayout() {
-  const { user, logout } = useAuth();
-  const { events, allEvents } = useEvent();
+  const { user, logout ,getProfile} = useAuth();
+  const {  allEvents } = useEvent();
   const [view, setView] = useState("events");
   const [selectedEventId, setSelectedEventId] = useState(null);
+  console.log({user});
+  
 
   useEffect(() => {
     allEvents();
   }, []);
 
   const token = localStorage.getItem("token");
+
+    useEffect(() => {
+    if (token && !user) {
+      getProfile();
+    }
+  }, [token, user]);
+
+
   if (!token) {
     return <Navigate to="/" replace />;
   }
@@ -78,7 +88,7 @@ export default function DashboardLayout() {
       </div>
 
       <div className="flex-1 p-6 overflow-y-auto">
-        {selectedEventId ? <EventDetail id={selectedEventId} onBack={() => setSelectedEventId(null)} /> : view === "events" ? <EventList onSelect={(id) => setSelectedEventId(id)} /> : <EventForm />}
+        {selectedEventId ? <EventDetail id={selectedEventId} onBack={() => setSelectedEventId(null)} /> : view === "events" ? <EventList  user={user} onSelect={(id) => setSelectedEventId(id)} /> : <EventForm />}
       </div>
     </div>
   );

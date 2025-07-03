@@ -1,5 +1,5 @@
 import { createContext, useContext, useState } from "react";
-import api from "@/lib/axios";
+import api from "@/lib/Axios";
 
 const EventContext = createContext();
 

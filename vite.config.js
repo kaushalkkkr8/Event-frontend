@@ -5,6 +5,11 @@ import { defineConfig } from "vite"
 
 // https://vite.dev/config/
 export default defineConfig({
+//   server:{
+// proxy:{
+//   "api":"https://event-backend-eta-one.vercel.app/"
+// }
+//   },
   plugins: [react(), tailwindcss()],
   resolve: {
     alias: {

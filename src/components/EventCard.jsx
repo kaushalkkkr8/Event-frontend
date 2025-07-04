@@ -1,11 +1,6 @@
 import { useForm } from "react-hook-form";
-import { useState } from "react";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardContent,
-} from "@/components/ui/card";
+import { useEffect, useState } from "react";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
@@ -23,12 +18,20 @@ export default function EventForm() {
   const { addEvent, allEvents } = useEvent();
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false); // loading state
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const [today, setToday] = useState("");
+
+  useEffect(() => {
+    const now = new Date();
+    const iso = now.toISOString().split("T")[0];
+    setToday(iso);
+  }, []);
 
   const onSubmit = async (data) => {
     setError("");
     setMessage("");
-    setIsSubmitting(true); // start spinner
+    setIsSubmitting(true);
 
     try {
       const formData = new FormData();
@@ -58,53 +61,35 @@ export default function EventForm() {
         <CardTitle className="text-2xl">Create New Event</CardTitle>
       </CardHeader>
       <CardContent>
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className="space-y-4"
-          encType="multipart/form-data"
-        >
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" encType="multipart/form-data">
           <div>
             <Label>Title</Label>
             <Input {...register("title", { required: true, minLength: 3 })} />
-            {errors.title && (
-              <p className="text-red-500 text-sm">Title is required (min 3 characters)</p>
-            )}
+            {errors.title && <p className="text-red-500 text-sm">Title is required (min 3 characters)</p>}
           </div>
 
           <div>
             <Label>About</Label>
             <Input {...register("about", { required: true })} />
-            {errors.about && (
-              <p className="text-red-500 text-sm">About is required</p>
-            )}
+            {errors.about && <p className="text-red-500 text-sm">About is required</p>}
           </div>
 
           <div>
             <Label>Description</Label>
-            <textarea
-              rows={4}
-              className="w-full rounded-md border px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
-              {...register("description", { required: true })}
-            />
-            {errors.description && (
-              <p className="text-red-500 text-sm">Description is required</p>
-            )}
+            <textarea rows={4} className="w-full rounded-md border px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500" {...register("description", { required: true })} />
+            {errors.description && <p className="text-red-500 text-sm">Description is required</p>}
           </div>
 
           <div>
             <Label>Date</Label>
-            <Input type="date" {...register("date", { required: true })} />
-            {errors.date && (
-              <p className="text-red-500 text-sm">Date is required</p>
-            )}
+            <Input type="date" min={today} {...register("date", { required: true })} />
+            {errors.date && <p className="text-red-500 text-sm">Date is required</p>}
           </div>
 
           <div>
             <Label>Location</Label>
             <Input {...register("location", { required: true })} />
-            {errors.location && (
-              <p className="text-red-500 text-sm">Location is required</p>
-            )}
+            {errors.location && <p className="text-red-500 text-sm">Location is required</p>}
           </div>
 
           <div>
@@ -112,11 +97,7 @@ export default function EventForm() {
             <Input type="file" accept="image/*" {...register("image")} />
           </div>
 
-          <Button
-            type="submit"
-            className="w-full bg-green-600 hover:bg-green-700"
-            disabled={isSubmitting}
-          >
+          <Button type="submit" className="w-full bg-green-600 hover:bg-green-700" disabled={isSubmitting}>
             {isSubmitting ? (
               <span className="flex items-center justify-center gap-2">
                 <Loader2 className="animate-spin w-4 h-4" /> Creating...

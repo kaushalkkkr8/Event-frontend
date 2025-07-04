@@ -148,9 +148,9 @@ export default function DashboardLayout() {
 
       {/* Sidebar */}
       <div
-        className={`fixed md:static z-40 transition-transform transform ${
+        className={`fixed   z-40 transition-transform transform ${
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
-        } md:translate-x-0 w-64 bg-white/90 backdrop-blur-sm border-r px-4 py-6 space-y-8 shadow-sm h-screen top-0 left-0`}
+        } md:translate-x-0 w-64 h-screen  backdrop-blur-sm border-r px-4 py-6 space-y-8 shadow-sm top-0 left-0`}
       >
         <div className="flex items-center gap-3">
           <Avatar>
@@ -199,7 +199,7 @@ export default function DashboardLayout() {
       </div>
 
       {/* Main Content */}
-      <div className="flex-1  overflow-y-auto  ml-0">
+      <div className="flex-1  overflow-y-auto  ml-0 md:ml-64 p-6">
         {selectedEventId ? (
           <EventDetail id={selectedEventId} onBack={() => setSelectedEventId(null)} />
         ) : view === "events" ? (

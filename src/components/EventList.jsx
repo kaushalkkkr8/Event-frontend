@@ -308,8 +308,6 @@
 
 // export default EventList;
 
-
-
 import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useEvent } from "@/context/EventContext";
@@ -333,9 +331,7 @@ const EventList = ({ user, onSelect }) => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const queryDate = date
-        ? `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`
-        : "";
+      const queryDate = date ? `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}` : "";
 
       const res = await allEvents({
         search,
@@ -412,17 +408,8 @@ const EventList = ({ user, onSelect }) => {
             const isRegistered = event?.attendees?.some((att) => att._id === user?._id);
 
             return (
-              <div
-                key={event?._id}
-                className="border px-4 py-4 rounded-lg shadow-md bg-white/90 backdrop-blur-sm flex flex-col justify-between text-sm"
-              >
-                {event?.image?.imageURL && (
-                  <img
-                    alt={event?.image?.originalName || "event-image"}
-                    src={event?.image?.imageURL}
-                    className="w-full h-40 object-cover rounded-md mb-3"
-                  />
-                )}
+              <div key={event?._id} className="border px-4 py-4 rounded-lg shadow-md bg-white/90 backdrop-blur-sm flex flex-col justify-between text-sm">
+                {event?.image?.imageURL && <img alt={event?.image?.originalName || "event-image"} src={event?.image?.imageURL} className="w-full h-40 object-cover rounded-md mb-3" />}
 
                 <div>
                   <h2 className="text-md font-semibold">{event?.title}</h2>
@@ -432,13 +419,13 @@ const EventList = ({ user, onSelect }) => {
                   </div>
                 </div>
 
-                <div className="flex flex-col sm:flex-row justify-between gap-2 mt-4">
-                  <Button variant="outline" size="sm" onClick={() => onSelect(event?._id)}>
+                <div className="flex flex-col gap-2 mt-4">
+                  <Button variant="outline" size="sm" onClick={() => onSelect(event?._id)} className="w-full cursor-pointer">
                     Details
                   </Button>
                   <Button
                     size="sm"
-                    className={isRegistered ? "cursor-not-allowed opacity-50" : "bg-green-600 hover:bg-green-700 text-white"}
+                    className={`w-full ${isRegistered ? "cursor-not-allowed opacity-50" : "bg-green-600 hover:bg-green-700 text-white"}`}
                     disabled={isRegistered}
                     onClick={() => handleRegister(event?._id)}
                   >
@@ -453,19 +440,11 @@ const EventList = ({ user, onSelect }) => {
 
       {/* Pagination */}
       <div className="flex justify-center gap-4 mt-6 flex-wrap">
-        <Button
-          variant="outline"
-          onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
-          disabled={page === 1}
-        >
+        <Button variant="outline" onClick={() => setPage((prev) => Math.max(prev - 1, 1))} disabled={page === 1}>
           Previous
         </Button>
         <span className="self-center text-gray-700">Page {page}</span>
-        <Button
-          variant="outline"
-          onClick={() => setPage((prev) => prev + 1)}
-          disabled={page >= totalPages}
-        >
+        <Button variant="outline" onClick={() => setPage((prev) => prev + 1)} disabled={page >= totalPages}>
           Next
         </Button>
       </div>
@@ -474,4 +453,3 @@ const EventList = ({ user, onSelect }) => {
 };
 
 export default EventList;
-
